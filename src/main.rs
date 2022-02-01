@@ -1,4 +1,3 @@
-use alea::f32_less_than;
 use alea::f64_less_than;
 use alea::i32_less_than;
 
@@ -11,7 +10,7 @@ use crate::boid::Boid;
 
 const BOID_COUNT: u16 = 128;
 const BOID_VIEW_DISTANCE: i32 = 12;
-const GRID_DIMENSIONS: [i8; 2] = [5, 5];
+//const GRID_DIMENSIONS: [i8; 2] = [5, 5];
 const WINDOW_DIMENSIONS: [i32; 2] = [1280, 720];
 
 fn create_boids(number: u16) -> Vec<Boid> {
@@ -48,7 +47,7 @@ fn main() {
 
         d.clear_background(Color::new(127, 127, 127, 255));
         for b in &boids {
-            b.render(&mut d, WINDOW_DIMENSIONS);
+            b.render(&mut d);
         }
     }
 }
