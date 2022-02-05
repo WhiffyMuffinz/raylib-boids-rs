@@ -11,13 +11,16 @@ pub struct Boid {
 }
 
 impl Boid {
-    pub fn accumulate_forces(&mut self, boids: &Vec<Boid>, window: [i32; 2]) {
+    pub fn update(&mut self, boids: &Vec<Boid>, window: [i32; 2], dt: i32) {}
+
+    fn accumulate_forces(&mut self, boids: &Vec<Boid>, window: [i32; 2]) -> Vector2<f64> {
         let align = self.alignment(boids);
         let cohes = self.cohesion(boids);
         let sepa = self.separation(boids);
         let awall = self.avoid_walls(window);
-        //TODO: sum vector components
-        self.vector = na::base::Matrix::normalize(&self.vector);
+        let mut out = self.vector + align + cohes + sepa + awall;
+        out = na::base::Matrix::normalize(&self.vector);
+        out
     }
     pub fn render(&self, d: &mut RaylibDrawHandle) {
         d.draw_circle(
@@ -92,10 +95,8 @@ impl Boid {
     }
     fn avoid_walls(&self, window: [i32; 2]) -> Vector2<f64> {
         let center = [(window[0] / 2) as f64, (window[1] / 2) as f64];
-        let mut x = 0.0;
-        let mut y = 0.0;
-        x = -(self.position[0] - center[0]);
-        y = -(self.position[0] - center[0]);
+        let mut x = -(self.position[0] - center[0]);
+        let mut y = -(self.position[0] - center[0]);
         return na::base::Matrix::normalize(&Vector2::new(x, y));
     }
     fn distance_from(&self, other: &Boid) -> f64 {
