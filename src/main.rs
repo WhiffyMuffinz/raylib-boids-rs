@@ -41,8 +41,15 @@ fn main() {
         .title("hello world")
         .build();
     let mut boids = create_boids(BOID_COUNT);
+    
 
     while !rl.window_should_close() {
+        let dt =  rl.get_frame_time();
+
+        for b in &boids {
+            b.update(&boids.clone(), WINDOW_DIMENSIONS, dt);
+        }
+
         let mut d = rl.begin_drawing(&thread);
 
         d.clear_background(Color::new(127, 127, 127, 255));
