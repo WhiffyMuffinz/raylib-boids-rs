@@ -18,7 +18,7 @@ impl Boid {
         self.position = [self.position[0] + self.vector[0] as f64 * dt as f64, self.position[1] + self.vector[1] as f64 * dt as f64];
     }
 
-    fn accumulate_forces(&self, boids: &Vec<Boid>, window: [i32; 2]) -> Vector2<f64> {
+    pub fn accumulate_forces(&self, boids: &Vec<Boid>, window: [i32; 2]) -> Vector2<f64> {
         let align = self.alignment(boids);
         let cohes = self.cohesion(boids);
         let sepa = self.separation(boids);
@@ -35,7 +35,7 @@ impl Boid {
             self.colour,
         );
     }
-    fn alignment(&self, boids: &Vec<Boid>) -> Vector2<f64> {
+    pub fn alignment(&self, boids: &Vec<Boid>) -> Vector2<f64> {
         let mut neighbour_count = 0.0;
         let mut out: Vector2<f64> = Vector2::new(0.0, 0.0);
         for b in boids {
@@ -55,7 +55,7 @@ impl Boid {
             return Vector2::new(0.0, 0.0);
         }
     }
-    fn cohesion(&self, boids: &Vec<Boid>) -> Vector2<f64> {
+    pub fn cohesion(&self, boids: &Vec<Boid>) -> Vector2<f64> {
         let mut neighbour_count = 0.0;
         let mut out = [0.0, 0.0];
         for b in boids {
@@ -78,7 +78,7 @@ impl Boid {
             return Vector2::new(0.0, 0.0);
         }
     }
-    fn separation(&self, boids: &Vec<Boid>) -> Vector2<f64> {
+    pub fn separation(&self, boids: &Vec<Boid>) -> Vector2<f64> {
         let mut neighbour_count = 0.0;
         let mut out = Vector2::new(0.0, 0.0);
         for b in boids {
@@ -98,13 +98,13 @@ impl Boid {
             return out;
         }
     }
-    fn avoid_walls(&self, window: [i32; 2]) -> Vector2<f64> {
+    pub fn avoid_walls(&self, window: [i32; 2]) -> Vector2<f64> {
         let center = [(window[0] / 2) as f64, (window[1] / 2) as f64];
         let x = -(self.position[0] - center[0]);
         let y = -(self.position[0] - center[0]);
         return na::base::Matrix::normalize(&Vector2::new(x, y));
     }
-    fn distance_from(&self, other: &Boid) -> f64 {
+    pub fn distance_from(&self, other: &Boid) -> f64 {
         return ((self.position[0] + other.position[0]).powi(2)
             + (self.position[1] + other.position[1]).powi(2))
         .sqrt();

@@ -12,6 +12,7 @@ const BOID_COUNT: u16 = 128;
 const BOID_VIEW_DISTANCE: i32 = 12;
 //const GRID_DIMENSIONS: [i8; 2] = [5, 5];
 const WINDOW_DIMENSIONS: [i32; 2] = [1280, 720];
+const DEBUG: bool = false;
 
 fn create_boids(number: u16) -> Vec<Boid> {
     let mut out: Vec<Boid> = Vec::new();
@@ -35,20 +36,27 @@ fn create_boids(number: u16) -> Vec<Boid> {
     out
 }
 
-fn main() {
+fn main2() {
     let (mut rl, thread) = raylib::init()
         .size(WINDOW_DIMENSIONS[0], WINDOW_DIMENSIONS[1])
         .title("hello world")
         .build();
     let mut boids = create_boids(BOID_COUNT);
-    
+    let mut boids2 = boids.clone();
 
+    let mut n = 0;
     while !rl.window_should_close() {
-        let dt =  rl.get_frame_time();
+        let dt = rl.get_frame_time();
 
-        for b in &boids {
-            b.update(&boids.clone(), WINDOW_DIMENSIONS, dt);
+        for b in &mut boids {
+            b.update(&boids2, WINDOW_DIMENSIONS, dt);
+            if DEBUG && n < 1 {
+                println!("{}, {}", b.position[0], b.position[1]);
+            }
         }
+        boids2 = boids.clone();
+        //println!("1: {}, {}",boids[1].position[0], boids[1].position[1]);
+        //println!("2: {}, {}",boids2[1].position[0], boids2[1].position[1]);
 
         let mut d = rl.begin_drawing(&thread);
 
@@ -56,5 +64,31 @@ fn main() {
         for b in &boids {
             b.render(&mut d);
         }
+        n += 1;
     }
+}
+
+fn main() {
+    let mut b: Boid = Boid {
+        colour: Color::BLACK,
+        num: 0,
+        position: [0.0, 0.0],
+        vector: Vector2::new(1.0, 1.0),
+        view_distance: BOID_VIEW_DISTANCE,
+    };
+    let mut b2: Boid = Boid {
+        colour: Color::BLACK,
+        num: 1,
+        position: [1.0, 1.0],
+        vector: Vector2::new(-1.0, -1.0),
+        view_distance: BOID_VIEW_DISTANCE,
+    };
+    println!(
+        "1: p:{},{} v:{},{}",
+        b.position[0], b.position[1], b.vector[0], b.vector[1]
+    );
+    println!(
+        "2: p:{},{} v:{},{}",
+        b2.position[0], b2.position[1], b2.vector[0], b2.vector[1]
+    );
 }
