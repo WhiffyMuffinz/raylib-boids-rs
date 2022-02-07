@@ -9,6 +9,7 @@ pub struct Boid {
     pub view_distance: i32,
     pub colour: Color,
     pub num: u8,
+    pub speed: f64,
 }
 
 impl Boid {
@@ -16,8 +17,8 @@ impl Boid {
         let vector = self.accumulate_forces(boids, window);
         self.vector = vector;
         self.position = [
-            self.position[0] + self.vector[0] as f64 * dt as f64,
-            self.position[1] + self.vector[1] as f64 * dt as f64,
+            self.position[0] + (self.speed * self.vector[0] as f64 * dt as f64),
+            self.position[1] + (self.speed * self.vector[1] as f64 * dt as f64),
         ];
     }
 

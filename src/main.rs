@@ -10,9 +10,10 @@ use crate::boid::Boid;
 
 const BOID_COUNT: u16 = 128;
 const BOID_VIEW_DISTANCE: i32 = 12;
-//const GRID_DIMENSIONS: [i8; 2] = [5, 5];
 const WINDOW_DIMENSIONS: [i32; 2] = [1280, 720];
-const DEBUG: bool = false;
+const BOID_SPEED: f64 = 20.0;
+//const GRID_DIMENSIONS: [i8; 2] = [5, 5];
+//const DEBUG: bool = false;
 
 fn create_boids(number: u16) -> Vec<Boid> {
     let mut out: Vec<Boid> = Vec::new();
@@ -31,6 +32,7 @@ fn create_boids(number: u16) -> Vec<Boid> {
             vector: Vector2::new(f64_less_than(1.0), f64_less_than(1.0)),
             view_distance: BOID_VIEW_DISTANCE,
             num: i as u8,
+            speed: BOID_SPEED,
         });
     }
     out
@@ -63,8 +65,8 @@ fn main() {
         //}
 
         //boids2 = boids.clone();
-        //println!("1: {}, {}",boids[1].position[0], boids[1].position[1]);
-        //println!("2: {}, {}",boids2[1].position[0], boids2[1].position[1]);
+        println!("1: {}, {}", boids[1].position[0], boids[1].position[1]);
+        println!("2: {}, {}", boids2[1].position[0], boids2[1].position[1]);
 
         let mut d = rl.begin_drawing(&thread);
 
@@ -80,27 +82,27 @@ fn main() {
     }
 }
 
-fn main2() {
-    let mut b: Boid = Boid {
-        colour: Color::BLACK,
-        num: 0,
-        position: [0.0, 0.0],
-        vector: Vector2::new(1.0, 1.0),
-        view_distance: BOID_VIEW_DISTANCE,
-    };
-    let mut b2: Boid = Boid {
-        colour: Color::BLACK,
-        num: 1,
-        position: [1.0, 1.0],
-        vector: Vector2::new(-1.0, -1.0),
-        view_distance: BOID_VIEW_DISTANCE,
-    };
-    println!(
-        "1: p:{},{} v:{},{}",
-        b.position[0], b.position[1], b.vector[0], b.vector[1]
-    );
-    println!(
-        "2: p:{},{} v:{},{}",
-        b2.position[0], b2.position[1], b2.vector[0], b2.vector[1]
-    );
-}
+//fn main2() {
+//    let mut b: Boid = Boid {
+//        colour: Color::BLACK,
+//        num: 0,
+//        position: [0.0, 0.0],
+//        vector: Vector2::new(1.0, 1.0),
+//        view_distance: BOID_VIEW_DISTANCE,
+//    };
+//    let mut b2: Boid = Boid {
+//        colour: Color::BLACK,
+//        num: 1,
+//        position: [1.0, 1.0],
+//        vector: Vector2::new(-1.0, -1.0),
+//        view_distance: BOID_VIEW_DISTANCE,
+//    };
+//    println!(
+//        "1: p:{},{} v:{},{}",
+//        b.position[0], b.position[1], b.vector[0], b.vector[1]
+//    );
+//    println!(
+//        "2: p:{},{} v:{},{}",
+//        b2.position[0], b2.position[1], b2.vector[0], b2.vector[1]
+//    );
+//}
