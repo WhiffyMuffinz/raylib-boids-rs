@@ -15,7 +15,10 @@ impl Boid {
     pub fn update(&mut self, boids: &Vec<Boid>, window: [i32; 2], dt: f32) {
         let vector = self.accumulate_forces(boids, window);
         self.vector = vector;
-        self.position = [self.position[0] + self.vector[0] as f64 * dt as f64, self.position[1] + self.vector[1] as f64 * dt as f64];
+        self.position = [
+            self.position[0] + self.vector[0] as f64 * dt as f64,
+            self.position[1] + self.vector[1] as f64 * dt as f64,
+        ];
     }
 
     pub fn accumulate_forces(&self, boids: &Vec<Boid>, window: [i32; 2]) -> Vector2<f64> {
@@ -47,7 +50,7 @@ impl Boid {
                 }
             }
         }
-        if neighbour_count >= 0.0 {
+        if neighbour_count > 0.0 {
             out[0] /= neighbour_count;
             out[1] /= neighbour_count;
             return na::base::Matrix::normalize(&out);
@@ -67,7 +70,7 @@ impl Boid {
                 }
             }
         }
-        if neighbour_count >= 0.0 {
+        if neighbour_count > 0.0 {
             out[0] /= neighbour_count;
             out[1] /= neighbour_count;
             return na::base::Matrix::normalize(&Vector2::new(
@@ -92,7 +95,7 @@ impl Boid {
         }
         out[0] *= -1.0;
         out[1] *= -1.0;
-        if neighbour_count >= 0.0 {
+        if neighbour_count > 0.0 {
             return na::base::Matrix::normalize(&out);
         } else {
             return out;

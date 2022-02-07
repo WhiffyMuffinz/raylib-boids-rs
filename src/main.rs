@@ -36,7 +36,7 @@ fn create_boids(number: u16) -> Vec<Boid> {
     out
 }
 
-fn main2() {
+fn main() {
     let (mut rl, thread) = raylib::init()
         .size(WINDOW_DIMENSIONS[0], WINDOW_DIMENSIONS[1])
         .title("hello world")
@@ -48,27 +48,39 @@ fn main2() {
     while !rl.window_should_close() {
         let dt = rl.get_frame_time();
 
-        for b in &mut boids {
-            b.update(&boids2, WINDOW_DIMENSIONS, dt);
-            if DEBUG && n < 1 {
-                println!("{}, {}", b.position[0], b.position[1]);
+        for i in 0..boids.len() {
+            if n % 2 == 0 {
+                boids[i].update(&boids2, WINDOW_DIMENSIONS, dt);
+            } else {
+                boids2[i].update(&boids, WINDOW_DIMENSIONS, dt);
             }
         }
-        boids2 = boids.clone();
+        //for b in &mut boids {
+        //    b.update(&boids2, WINDOW_DIMENSIONS, dt);
+        //    if DEBUG && n < 1 {
+        //        println!("{}, {}", b.position[0], b.position[1]);
+        //    }
+        //}
+
+        //boids2 = boids.clone();
         //println!("1: {}, {}",boids[1].position[0], boids[1].position[1]);
         //println!("2: {}, {}",boids2[1].position[0], boids2[1].position[1]);
 
         let mut d = rl.begin_drawing(&thread);
 
         d.clear_background(Color::new(127, 127, 127, 255));
-        for b in &boids {
-            b.render(&mut d);
+        for i in 0..boids.len() {
+            if n % 2 == 0 {
+                boids[i].render(&mut d);
+            } else {
+                boids2[i].render(&mut d);
+            }
         }
         n += 1;
     }
 }
 
-fn main() {
+fn main2() {
     let mut b: Boid = Boid {
         colour: Color::BLACK,
         num: 0,
