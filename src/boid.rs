@@ -17,8 +17,10 @@ impl Boid {
         let vector = self.accumulate_forces(boids, window);
         self.vector = vector;
         self.position = [
-            self.position[0] + (self.speed * self.vector[0] as f64 * dt as f64),
-            self.position[1] + (self.speed * self.vector[1] as f64 * dt as f64),
+            (self.position[0] + (self.speed * self.vector[0] as f64 * dt as f64))
+                % window[0] as f64,
+            (self.position[1] + (self.speed * self.vector[1] as f64 * dt as f64))
+                % window[1] as f64,
         ];
     }
 
@@ -26,8 +28,8 @@ impl Boid {
         let align = self.alignment(boids);
         let cohes = self.cohesion(boids);
         let sepa = self.separation(boids);
-        let awall = self.avoid_walls(window);
-        let mut out = self.vector + align + cohes + sepa + awall;
+        //let awall = self.avoid_walls(window);
+        let mut out = self.vector + align + cohes + sepa; //+ awall;
         out = na::base::Matrix::normalize(&out);
         out
     }
