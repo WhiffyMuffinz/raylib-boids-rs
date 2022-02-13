@@ -33,13 +33,28 @@ impl Boid {
         out = na::base::Matrix::normalize(&out);
         out
     }
-    pub fn render(&self, d: &mut RaylibDrawHandle) {
+    pub fn render(&self, d: &mut RaylibDrawHandle, debug: bool) {
         d.draw_circle(
             self.position[0] as i32,
             self.position[1] as i32,
             5.0,
             self.colour,
         );
+        if debug {
+            d.draw_line(
+                self.position[0] as i32,
+                self.position[1] as i32,
+                (self.position[1] + self.vector[1]) as i32,
+                (self.position[0] + self.vector[0]) as i32,
+                Color::GREEN,
+            );
+            //d.draw_circle_lines(
+            //    self.position[0] as i32,
+            //    self.position[1] as i32,
+            //    self.view_distance as f32,
+            //    Color::GREEN,
+            //)
+        }
     }
     pub fn alignment(&self, boids: &Vec<Boid>) -> Vector2<f64> {
         let mut neighbour_count = 0.0;

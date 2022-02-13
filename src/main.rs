@@ -9,11 +9,11 @@ mod boid;
 use crate::boid::Boid;
 
 const BOID_COUNT: u16 = 128;
-const BOID_VIEW_DISTANCE: i32 = 120;
+const BOID_VIEW_DISTANCE: i32 = 1200;
 const WINDOW_DIMENSIONS: [i32; 2] = [1280, 720];
 const BOID_SPEED: f64 = 50.0;
 //const GRID_DIMENSIONS: [i8; 2] = [5, 5];
-//const DEBUG: bool = false;
+const DEBUG: bool = true;
 
 fn create_boids(number: u16) -> Vec<Boid> {
     let mut out: Vec<Boid> = Vec::new();
@@ -65,17 +65,17 @@ fn main() {
         //}
 
         //boids2 = boids.clone();
-        println!("1: {}, {}", boids[1].position[0], boids[1].position[1]);
-        println!("2: {}, {}", boids2[1].position[0], boids2[1].position[1]);
+        println!("1: {}, {}", boids[1].vector[0], boids[1].vector[1]);
+        println!("2: {}, {}", boids2[1].vector[0], boids2[1].vector[1]);
 
         let mut d = rl.begin_drawing(&thread);
 
         d.clear_background(Color::new(0, 0, 0, 255));
         for i in 0..boids.len() {
             if n % 2 == 100 {
-                boids2[i].render(&mut d);
+                boids2[i].render(&mut d, DEBUG);
             } else {
-                boids[i].render(&mut d);
+                boids[i].render(&mut d, DEBUG);
             }
         }
         n += 1;
