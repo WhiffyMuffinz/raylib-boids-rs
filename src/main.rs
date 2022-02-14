@@ -65,8 +65,8 @@ fn main() {
         //}
 
         //boids2 = boids.clone();
-        println!("1: {}, {}", boids[1].vector[0], boids[1].vector[1]);
-        println!("2: {}, {}", boids2[1].vector[0], boids2[1].vector[1]);
+        println!("1: {}, {}", boids[1].position[0], boids[1].position[1]);
+        println!("2: {}, {}", boids2[1].position[0], boids2[1].position[1]);
 
         let mut d = rl.begin_drawing(&thread);
 

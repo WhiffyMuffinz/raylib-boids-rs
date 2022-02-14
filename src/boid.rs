@@ -16,12 +16,16 @@ impl Boid {
     pub fn update(&mut self, boids: &Vec<Boid>, window: [i32; 2], dt: f32) {
         let vector = self.accumulate_forces(boids, window);
         self.vector = vector;
-        self.position = [
-            (self.position[0] + (self.speed * self.vector[0] as f64 * dt as f64))
-                % window[0] as f64,
-            (self.position[1] + (self.speed * self.vector[1] as f64 * dt as f64))
-                % window[1] as f64,
-        ];
+        //self.position = [
+        //    (self.position[0] + (self.speed * self.vector[0] as f64 * dt as f64))
+        //        % window[0] as f64,
+        //    (self.position[1] + (self.speed * self.vector[1] as f64 * dt as f64))
+        //        % window[1] as f64,
+        //];
+        self.position[0] =
+            (self.position[0] + (self.speed * vector[0] * dt as f64)) % window[0] as f64;
+        self.position[1] =
+            (self.position[1] + (self.speed * vector[1] * dt as f64)) % window[1] as f64;
     }
 
     pub fn accumulate_forces(&self, boids: &Vec<Boid>, window: [i32; 2]) -> Vector2<f64> {
@@ -44,16 +48,16 @@ impl Boid {
             d.draw_line(
                 self.position[0] as i32,
                 self.position[1] as i32,
-                (self.position[1] + self.vector[1]) as i32,
-                (self.position[0] + self.vector[0]) as i32,
+                5 * (self.position[1] + self.vector[1]) as i32,
+                5 * (self.position[0] + self.vector[0]) as i32,
                 Color::GREEN,
             );
-            //d.draw_circle_lines(
-            //    self.position[0] as i32,
-            //    self.position[1] as i32,
-            //    self.view_distance as f32,
-            //    Color::GREEN,
-            //)
+            d.draw_circle_lines(
+                self.position[0] as i32,
+                self.position[1] as i32,
+                self.view_distance as f32,
+                Color::GREEN,
+            )
         }
     }
     pub fn alignment(&self, boids: &Vec<Boid>) -> Vector2<f64> {
