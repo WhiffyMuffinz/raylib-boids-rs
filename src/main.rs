@@ -3,7 +3,6 @@ use alea::i32_less_than;
 
 use nalgebra::Vector2;
 use raylib::prelude::*;
-use std::fs::File;
 
 mod boid;
 
@@ -54,7 +53,6 @@ fn main() {
     let mut boids2 = boids.clone();
 
     let mut n = 0;
-    let mut f = File::create("log.txt");
     while !rl.window_should_close() {
         let dt = rl.get_frame_time();
 

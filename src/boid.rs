@@ -2,8 +2,8 @@ use nalgebra as na;
 use nalgebra::Vector2;
 use raylib::prelude::*;
 
-use std::fs::File;
-use std::io::Write;
+use std::fs::{read_to_string, File, OpenOptions};
+use std::io::{BufWriter, Write};
 use std::path::Path;
 
 #[derive(Debug, Copy, Clone)]
@@ -31,16 +31,23 @@ impl Boid {
         name = name + ".txt";
         if debug && self.num == 0 || self.num == 1 {
             if !(Path::new(&name).exists()) {
-                let mut f = File::create("log.txt").expect("unable to create file");
+                let mut f = File::create(&name).expect("unable to create file");
+                println!("Created new file");
                 write!(f, "x: {}", self.speed * x_comp * dt as f64).expect("Access is Denied.");
                 write!(f, " y: {}", self.speed * y_comp * dt as f64).expect("Access is Denied.");
                 write!(f, "\n").expect("Access is Denied.");
             } else {
-                let mut f = File::open(&name).expect("Unable to Open file");
+                let mut f = OpenOptions::new()
+                    .write(true)
+                    .read(true)
+                    .open(&name)
+                    .expect("Unable to Open File");
+                let tmp = read_to_string(&name).expect("Access is Denied");
+                write!(f, "{}", tmp).expect("Access is Denied");
                 write!(f, "x: {}", self.speed * x_comp * dt as f64).expect("Access is Denied.");
                 write!(f, " y: {}", self.speed * y_comp * dt as f64).expect("Access is Denied.");
                 write!(f, "\n").expect("Access is Denied.");
-            }
+            } //File::open(&name).expect("Unable to Open file");
         }
         self.position[0] =
             (self.position[0] + (self.speed * x_comp * dt as f64)) % window[0] as f64;
