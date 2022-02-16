@@ -2,6 +2,10 @@ use nalgebra as na;
 use nalgebra::Vector2;
 use raylib::prelude::*;
 
+use std::fs::File;
+use std::io::Write;
+use std::path::Path;
+
 #[derive(Debug, Copy, Clone)]
 pub struct Boid {
     pub position: [f64; 2],
@@ -10,22 +14,38 @@ pub struct Boid {
     pub colour: Color,
     pub num: u8,
     pub speed: f64,
+    pub align_strength: f64,
+    pub sepa_strength: f64,
+    pub cohes_strength: f64,
 }
 
 impl Boid {
-    pub fn update(&mut self, boids: &Vec<Boid>, window: [i32; 2], dt: f32) {
+    pub fn update(&mut self, boids: &Vec<Boid>, window: [i32; 2], dt: f32, debug: bool) {
         let vector = self.accumulate_forces(boids, window);
         self.vector = vector;
-        //self.position = [
-        //    (self.position[0] + (self.speed * self.vector[0] as f64 * dt as f64))
-        //        % window[0] as f64,
-        //    (self.position[1] + (self.speed * self.vector[1] as f64 * dt as f64))
-        //        % window[1] as f64,
-        //];
+        let x_comp = vector[0];
+        let y_comp = vector[1];
+        let mut name: String = "log".to_owned();
+        let num = self.num as i32;
+        name = name + &num.to_string();
+        name = name + ".txt";
+        if debug && self.num == 0 || self.num == 1 {
+            if !(Path::new(&name).exists()) {
+                let mut f = File::create("log.txt").expect("unable to create file");
+                write!(f, "x: {}", self.speed * x_comp * dt as f64).expect("Access is Denied.");
+                write!(f, " y: {}", self.speed * y_comp * dt as f64).expect("Access is Denied.");
+                write!(f, "\n").expect("Access is Denied.");
+            } else {
+                let mut f = File::open(&name).expect("Unable to Open file");
+                write!(f, "x: {}", self.speed * x_comp * dt as f64).expect("Access is Denied.");
+                write!(f, " y: {}", self.speed * y_comp * dt as f64).expect("Access is Denied.");
+                write!(f, "\n").expect("Access is Denied.");
+            }
+        }
         self.position[0] =
-            (self.position[0] + (self.speed * vector[0] * dt as f64)) % window[0] as f64;
+            (self.position[0] + (self.speed * x_comp * dt as f64)) % window[0] as f64;
         self.position[1] =
-            (self.position[1] + (self.speed * vector[1] * dt as f64)) % window[1] as f64;
+            (self.position[1] + (self.speed * y_comp * dt as f64)) % window[1] as f64;
     }
 
     pub fn accumulate_forces(&self, boids: &Vec<Boid>, window: [i32; 2]) -> Vector2<f64> {
@@ -38,12 +58,7 @@ impl Boid {
         out
     }
     pub fn render(&self, d: &mut RaylibDrawHandle, debug: bool) {
-        d.draw_circle(
-            self.position[0] as i32,
-            self.position[1] as i32,
-            5.0,
-            self.colour,
-        );
+        d.draw_fps(10, 10);
         if debug {
             d.draw_line(
                 self.position[0] as i32,
@@ -52,13 +67,19 @@ impl Boid {
                 5 * (self.position[0] + self.vector[0]) as i32,
                 Color::GREEN,
             );
-            d.draw_circle_lines(
-                self.position[0] as i32,
-                self.position[1] as i32,
-                self.view_distance as f32,
-                Color::GREEN,
-            )
+            //d.draw_circle_lines(
+            //    self.position[0] as i32,
+            //    self.position[1] as i32,
+            //    self.view_distance as f32,
+            //    Color::GREEN,
+            //)
         }
+        d.draw_circle(
+            self.position[0] as i32,
+            self.position[1] as i32,
+            5.0,
+            self.colour,
+        );
     }
     pub fn alignment(&self, boids: &Vec<Boid>) -> Vector2<f64> {
         let mut neighbour_count = 0.0;
