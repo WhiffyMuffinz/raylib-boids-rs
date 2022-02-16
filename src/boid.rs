@@ -33,8 +33,24 @@ impl Boid {
             if !(Path::new(&name).exists()) {
                 let mut f = File::create(&name).expect("unable to create file");
                 println!("Created new file");
-                write!(f, "x: {}", self.speed * x_comp * dt as f64).expect("Access is Denied.");
-                write!(f, " y: {}", self.speed * y_comp * dt as f64).expect("Access is Denied.");
+                write!(
+                    f,
+                    "x: {}, {}, {}, {}",
+                    (self.speed * x_comp * dt as f64),
+                    self.speed,
+                    x_comp,
+                    dt
+                )
+                .expect("Access is Denied.");
+                write!(
+                    f,
+                    "\ty: {}, {}, {}, {}",
+                    (self.speed * x_comp * dt as f64),
+                    self.speed,
+                    y_comp,
+                    dt
+                )
+                .expect("Access is Denied.");
                 write!(f, "\n").expect("Access is Denied.");
             } else {
                 let mut f = OpenOptions::new()
@@ -44,8 +60,24 @@ impl Boid {
                     .expect("Unable to Open File");
                 let tmp = read_to_string(&name).expect("Access is Denied");
                 write!(f, "{}", tmp).expect("Access is Denied");
-                write!(f, "x: {}", self.speed * x_comp * dt as f64).expect("Access is Denied.");
-                write!(f, " y: {}", self.speed * y_comp * dt as f64).expect("Access is Denied.");
+                write!(
+                    f,
+                    "x: {}, {}, \t{}, {}",
+                    (self.speed * x_comp * dt as f64),
+                    self.speed,
+                    x_comp,
+                    dt
+                )
+                .expect("Access is Denied.");
+                write!(
+                    f,
+                    "\ty: {}, {}, \t{}, {}",
+                    (self.speed * x_comp * dt as f64),
+                    self.speed,
+                    y_comp,
+                    dt
+                )
+                .expect("Access is Denied.");
                 write!(f, "\n").expect("Access is Denied.");
             } //File::open(&name).expect("Unable to Open file");
         }
