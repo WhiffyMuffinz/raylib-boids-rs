@@ -16,7 +16,7 @@ const BOID_SPEED: f64 = 50.0;
 const SEPARATION_PROPORTION: f64 = 0.5;
 const COHESION_PROPORTION: f64 = 0.5;
 const ALIGNMENT_PROPORTION: f64 = 0.5;
-const DEBUG: bool = true;
+const DEBUG: bool = false;
 
 fn create_boids(number: u16) -> Vec<Boid> {
     let mut out: Vec<Boid> = Vec::new();

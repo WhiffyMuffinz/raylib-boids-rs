@@ -91,8 +91,8 @@ impl Boid {
         let align = self.alignment(boids);
         let cohes = self.cohesion(boids);
         let sepa = self.separation(boids);
-        //let awall = self.avoid_walls(window);
-        let mut out = self.vector + align + cohes + sepa; //+ awall;
+        let awall = self.avoid_walls(window);
+        let mut out = self.vector + align + cohes + sepa + awall;
         out = na::base::Matrix::normalize(&out);
         //if self.num == 1 {
         //println!(
@@ -108,8 +108,8 @@ impl Boid {
             d.draw_line(
                 self.position[0] as i32,
                 self.position[1] as i32,
-                5 * (self.position[1] + self.vector[1]) as i32,
-                5 * (self.position[0] + self.vector[0]) as i32,
+                (self.position[0] + (self.speed * self.vector[0])) as i32,
+                (self.position[1] + (self.speed * self.vector[1])) as i32,
                 Color::GREEN,
             );
             if self.num == 0 {
@@ -197,16 +197,16 @@ impl Boid {
     pub fn avoid_walls(&self, window: [i32; 2]) -> Vector2<f64> {
         let center = [(window[0] / 2) as f64, (window[1] / 2) as f64];
         let x = -(self.position[0] - center[0]);
-        let y = -(self.position[0] - center[0]);
+        let y = -(self.position[1] - center[1]);
         return na::base::Matrix::normalize(&Vector2::new(x, y));
     }
     pub fn distance_from(&self, other: &Boid) -> f64 {
         let out = ((self.position[0] - other.position[0]).powi(2)
             + (self.position[1] - other.position[1]).powi(2))
         .sqrt();
-        if self.num == 0 && out <= self.view_distance as f64 {
-            println!("{},{}", out, self.view_distance);
-        }
+        //if self.num == 0 && out <= self.view_distance as f64 {
+        //    println!("{},{}", out, self.view_distance);
+        //}
         return out;
     }
 }
