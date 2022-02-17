@@ -87,28 +87,3 @@ fn main() {
         n += 1;
     }
 }
-
-fn main2() {
-    //    let mut b: Boid = Boid {
-    //        colour: Color::BLACK,
-    //        num: 0,
-    //        position: [0.0, 0.0],
-    //        vector: Vector2::new(1.0, 1.0),
-    //        view_distance: BOID_VIEW_DISTANCE,
-    //    };
-    //    let mut b2: Boid = Boid {
-    //        colour: Color::BLACK,
-    //        num: 1,
-    //        position: [1.0, 1.0],
-    //        vector: Vector2::new(-1.0, -1.0),
-    //        view_distance: BOID_VIEW_DISTANCE,
-    //    };
-    //    println!(
-    //        "1: p:{},{} v:{},{}",
-    //        b.position[0], b.position[1], b.vector[0], b.vector[1]
-    //    );
-    //    println!(
-    //        "2: p:{},{} v:{},{}",
-    //        b2.position[0], b2.position[1], b2.vector[0], b2.vector[1]
-    //    );
-}
