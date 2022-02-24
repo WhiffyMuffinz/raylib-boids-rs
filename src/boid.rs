@@ -25,7 +25,7 @@ impl Boid {
         self.vector = vector;
         let x_comp = vector[0];
         let y_comp = vector[1];
-        if log && self.num == 0 || self.num == 1 {
+        if log && (self.num == 0 || self.num == 1) {
             let mut name: String = "log".to_owned();
             let num = self.num as i32;
             name = name + &num.to_string();
@@ -94,12 +94,6 @@ impl Boid {
         let awall = self.avoid_walls(window);
         let mut out = self.vector + align + cohes + sepa + awall;
         out = na::base::Matrix::normalize(&out);
-        //if self.num == 1 {
-        //println!(
-        //    "vec x:{}, y:{},\talign x:{}, y:{},\tcohes x:{},y:{},\tsepa x:{}, y:{}",
-        //    out[0], out[1], align[0], align[1], cohes[0], cohes[1], sepa[0], sepa[1]
-        //);
-        //}
         out
     }
     pub fn render(&self, d: &mut RaylibDrawHandle, debug: bool) {
@@ -157,9 +151,6 @@ impl Boid {
         if neighbour_count > 0.0 {
             out[0] /= neighbour_count;
             out[1] /= neighbour_count;
-            //if self.num == 0 {
-            //    println!("Here: {}", out);
-            //}
             return na::base::Matrix::normalize(&out);
         } else {
             return Vector2::new(0.0, 0.0);
@@ -218,9 +209,6 @@ impl Boid {
         let out = ((self.position[0] - other.position[0]).powi(2)
             + (self.position[1] - other.position[1]).powi(2))
         .sqrt();
-        //if self.num == 0 && out <= self.view_distance as f64 {
-        //    println!("{},{}", out, self.view_distance);
-        //}
         return out;
     }
 }

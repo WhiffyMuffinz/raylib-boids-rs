@@ -10,7 +10,7 @@ mod boid;
 
 use crate::boid::Boid;
 
-const BOID_COUNT: u16 = 5;
+const BOID_COUNT: u16 = 100;
 const BOID_VIEW_DISTANCE: i32 = 120;
 const WINDOW_DIMENSIONS: [i32; 2] = [1280, 720];
 const BOID_SPEED: f64 = 50.0;
@@ -66,20 +66,6 @@ fn main() {
             }
         }
         boids2 = boids.clone();
-
-        //for i in 0..boids.len() {
-        //    if n % 2 == 0 {
-        //        boids[i].update(&boids2, WINDOW_DIMENSIONS, dt, LOG);
-        //    } else {
-        //        boids2[i].update(&boids, WINDOW_DIMENSIONS, dt, LOG);
-        //    }
-        //}
-        //let i = boids.par_iter();
-        //for b in i {
-        //    b.update(&boids2, WINDOW_DIMENSIONS, dt, DEBUG);
-        //}
-
-        //boids2 = boids.clone();
 
         let mut d = rl.begin_drawing(&thread);
 
