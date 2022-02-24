@@ -8,5 +8,5 @@ edition = "2021"
 [dependencies]
 raylib = "3.7"
 nalgebra = "0.30.1"
-vecmath = "*"
 alea = "*"
+rayon = "1.5"

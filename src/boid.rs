@@ -3,7 +3,7 @@ use nalgebra::Vector2;
 use raylib::prelude::*;
 
 use std::fs::{read_to_string, File, OpenOptions};
-use std::io::{BufWriter, Write};
+use std::io::Write;
 use std::path::Path;
 
 #[derive(Debug, Copy, Clone)]
@@ -20,16 +20,16 @@ pub struct Boid {
 }
 
 impl Boid {
-    pub fn update(&mut self, boids: &Vec<Boid>, window: [i32; 2], dt: f32, debug: bool) {
+    pub fn update(&mut self, boids: &Vec<Boid>, window: [i32; 2], dt: f32, log: bool) {
         let vector = self.accumulate_forces(boids, window);
         self.vector = vector;
         let x_comp = vector[0];
         let y_comp = vector[1];
-        let mut name: String = "log".to_owned();
-        let num = self.num as i32;
-        name = name + &num.to_string();
-        name = name + ".txt";
-        if debug && self.num == 0 || self.num == 1 {
+        if log && self.num == 0 || self.num == 1 {
+            let mut name: String = "log".to_owned();
+            let num = self.num as i32;
+            name = name + &num.to_string();
+            name = name + ".txt";
             if !(Path::new(&name).exists()) {
                 let mut f = File::create(&name).expect("unable to create file");
                 println!("Created new file");
@@ -79,7 +79,7 @@ impl Boid {
                 )
                 .expect("Access is Denied.");
                 write!(f, "\n").expect("Access is Denied.");
-            } //File::open(&name).expect("Unable to Open file");
+            }
         }
         self.position[0] =
             (self.position[0] + (self.speed * x_comp * dt as f64)) % window[0] as f64;
@@ -121,6 +121,20 @@ impl Boid {
                 )
             }
         }
+        //d.draw_rectangle_pro(
+        //    ffi::Rectangle {
+        //        x: (self.position[0] - 25.0) as f32,
+        //        y: (self.position[1] - 2.5) as f32,
+        //        width: 50.0,
+        //        height: 5.0,
+        //    },
+        //    ffi::Vector2 {
+        //        x: self.position[0] as f32,
+        //        y: self.position[1] as f32,
+        //    },
+        //    60.0,
+        //    self.colour,
+        //);
         d.draw_circle(
             self.position[0] as i32,
             self.position[1] as i32,
