@@ -15,11 +15,12 @@ const BOID_VIEW_DISTANCE: i32 = 120;
 const WINDOW_DIMENSIONS: [i32; 2] = [1280, 720];
 const BOID_SPEED: f64 = 50.0;
 //const GRID_DIMENSIONS: [i8; 2] = [5, 5];
-const SEPARATION_PROPORTION: f64 = 0.5;
-const COHESION_PROPORTION: f64 = 0.5;
-const ALIGNMENT_PROPORTION: f64 = 0.5;
+const SEPARATION_PROPORTION: f64 = 2.0;
+const COHESION_PROPORTION: f64 = 2.5;
+const ALIGNMENT_PROPORTION: f64 = 5.5;
 const DEBUG: bool = true;
 const LOG: bool = false;
+const BOID_SIZE: f32 = 10.0;
 
 fn create_boids(number: u16) -> Vec<Boid> {
     let mut out: Vec<Boid> = Vec::new();
@@ -42,6 +43,7 @@ fn create_boids(number: u16) -> Vec<Boid> {
             align_strength: ALIGNMENT_PROPORTION,
             cohes_strength: COHESION_PROPORTION,
             sepa_strength: SEPARATION_PROPORTION,
+            size: BOID_SIZE,
         });
     }
     out

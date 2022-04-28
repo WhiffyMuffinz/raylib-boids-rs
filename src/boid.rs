@@ -17,6 +17,7 @@ pub struct Boid {
     pub align_strength: f64,
     pub sepa_strength: f64,
     pub cohes_strength: f64,
+    pub size: f32,
 }
 
 impl Boid {
@@ -88,16 +89,43 @@ impl Boid {
     }
 
     pub fn accumulate_forces(&self, boids: &Vec<Boid>, window: [i32; 2]) -> Vector2<f64> {
-        let align = self.alignment(boids);
-        let cohes = self.cohesion(boids);
-        let sepa = self.separation(boids);
+        let align = self.alignment(boids) * self.align_strength;
+        let cohes = self.cohesion(boids) * self.cohes_strength;
+        let sepa = self.separation(boids) * self.sepa_strength;
         let awall = self.avoid_walls(window);
-        let mut out = self.vector + align + cohes + sepa + awall;
+        let mut out = self.vector + align + cohes + sepa; //+ awall;
         out = na::base::Matrix::normalize(&out);
         out
     }
+
+    fn get_triangle_points(&self) -> [raylib::core::math::Vector2; 3] {
+        //returns an array of three vectors representing the points of a triangle
+        //takes into acount the direction the velocity vector is heading, and points the triangle in that direction
+        let mut angle = (self.vector[1] / self.vector[0]).atan() as f32;
+        if self.vector[0] < 0.0 {
+            angle += std::f32::consts::PI;
+        }
+
+        let point_1 = raylib::core::math::Vector2::new(
+            // point along the velocity vector
+            self.position[0] as f32 + (self.size + self.size * 0.1) * angle.cos(),
+            self.position[1] as f32 + (self.size + self.size * 0.1) * angle.sin(),
+        );
+        let point_2 = raylib::core::math::Vector2::new(
+            // point at the right of the velocity vector
+            self.position[0] as f32 + self.size * (angle + 2.0943951023931953).cos(),
+            self.position[1] as f32 + self.size * (angle + 2.0943951023931953).sin(),
+        );
+        let point_3 = raylib::core::math::Vector2::new(
+            // point at the left of the velocity vector
+            self.position[0] as f32 + self.size * (angle - 2.0943951023931953).cos(),
+            self.position[1] as f32 + self.size * (angle - 2.0943951023931953).sin(),
+        );
+        let points = [point_1, point_2, point_3];
+        // println!("{:?}, {:?}", self.position, points);
+        points
+    }
     pub fn render(&self, d: &mut RaylibDrawHandle, debug: bool) {
-        d.draw_fps(10, 10);
         if debug {
             d.draw_line(
                 self.position[0] as i32,
@@ -115,26 +143,8 @@ impl Boid {
                 )
             }
         }
-        //d.draw_rectangle_pro(
-        //    ffi::Rectangle {
-        //        x: (self.position[0] - 25.0) as f32,
-        //        y: (self.position[1] - 2.5) as f32,
-        //        width: 50.0,
-        //        height: 5.0,
-        //    },
-        //    ffi::Vector2 {
-        //        x: self.position[0] as f32,
-        //        y: self.position[1] as f32,
-        //    },
-        //    60.0,
-        //    self.colour,
-        //);
-        d.draw_circle(
-            self.position[0] as i32,
-            self.position[1] as i32,
-            5.0,
-            self.colour,
-        );
+        let points = self.get_triangle_points();
+        d.draw_triangle_lines(points[0], points[1], points[2], self.colour);
     }
     pub fn alignment(&self, boids: &Vec<Boid>) -> Vector2<f64> {
         let mut neighbour_count = 0.0;
